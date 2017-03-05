@@ -2,8 +2,8 @@ package services
 
 import java.time.LocalDateTime
 
-import components.{CsvReader, Year}
-import models.Query
+import components.CsvReader
+import models.{Query, Year}
 import utils.BaseSpec
 
 

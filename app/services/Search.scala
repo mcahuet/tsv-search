@@ -2,8 +2,8 @@ package services
 
 import javax.inject.Inject
 
-import components.{CsvReader, QueryDateTime}
-import models.Query
+import components.CsvReader
+import models.{Query, QueryDateTime}
 import play.api.Configuration
 
 class Search @Inject()(reader: CsvReader, configuration: Configuration) {

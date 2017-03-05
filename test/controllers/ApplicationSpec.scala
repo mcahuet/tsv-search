@@ -2,7 +2,7 @@ package controllers
 
 import java.time.LocalDateTime
 
-import components.Year
+import models.Year
 import play.api.mvc.{Result, Results}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._

@@ -2,7 +2,7 @@ package controllers
 
 import javax.inject.Inject
 
-import components.QueryDateTime
+import models.QueryDateTime
 import play.api.libs.json._
 import play.api.mvc._
 import services.Search
@@ -15,7 +15,6 @@ import services.Search
 class Application @Inject()(searchService: Search) extends Controller {
 
   // TODO put I18N
-  private val badDateFormat = "The param date should be 'yyyy','yyyy-MM','yyyy-MM-dd','yyyy-MM-dd HH','yyyy-MM-dd HH:mm'"
   private val missingQuery = "Missing query"
 
   /**
