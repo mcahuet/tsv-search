@@ -7,6 +7,9 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
 scalaVersion := "2.11.8"
 
+// Core dependencies
+libraryDependencies += filters
+
 libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "2.2.6" % "test",
   "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % "test",
