@@ -11,6 +11,7 @@ import scala.util.{Failure, Success, Try}
 /**
   * Read csv file
   */
+// TODO read gz file
 class CsvReader {
 
   val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")

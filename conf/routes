@@ -3,11 +3,8 @@
 # ~~~~
 
 # Home page
-GET     /                           @controllers.Application.index
-GET     /1/queries/count/:date      @controllers.Application.count(date: String)
-GET     /1/queries/popular/:date    @controllers.Application.popular(date: String, limit: Int)
-
-# Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET     /                           controllers.Application.index
+GET     /1/queries/count/:date      controllers.Application.count(date: String)
+GET     /1/queries/popular/:date    controllers.Application.popular(date: String, limit: Int)
 
     

@@ -56,7 +56,7 @@ class Application @Inject()(searchService: Search) extends Controller {
       case QueryTemporal(temporal) => {
         val popularQuery = searchService.popular(temporal, limit)
         if (popularQuery.isEmpty) {
-          InternalServerError(missingQuery)
+          NotFound(missingQuery)
         } else {
           Ok(Json.obj("queries" -> Json.toJson(popularQuery)))
         }
