@@ -26,7 +26,6 @@ class Search @Inject()(reader: CsvReader, configuration: Configuration) {
           } else {
             result
           }
-          // TODO verify limit < queries size
         }.toList.sortWith(_._2 > _._2).take(limit)
       })
   }
