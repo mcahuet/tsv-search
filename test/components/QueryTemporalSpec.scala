@@ -6,6 +6,13 @@ import utils.BaseSpec
 
 class QueryTemporalSpec extends BaseSpec {
 
+  trait BadDateTest {
+    def date : String
+
+    val temporal = QueryDateTime.unapply(date)
+
+    temporal must be (None)
+  }
 
   "QueryTemporal" must {
     "not parse bad date format" in {
@@ -19,6 +26,7 @@ class QueryTemporalSpec extends BaseSpec {
       temporalBadYear must be (None)
       temporalBadMonth must be (None)
       temporalBadDay must be (None)
+      temporalBadHour must be (None)
       temporalBadMinute must be (None)
     }
 
@@ -46,10 +54,10 @@ class QueryTemporalSpec extends BaseSpec {
       temporal.get.filter(outRangeDate) must be (false)
     }
 
-    "parse bad month" in {
-      val temporal = QueryDateTime.unapply("2015-14")
+    "parse bad month" in new BadDateTest{
 
-      temporal must be (None)
+      override def date = "2015-14"
+
     }
 
     "parse day" in {
@@ -64,16 +72,12 @@ class QueryTemporalSpec extends BaseSpec {
       temporal.get.filter(outRangeDate) must be (false)
     }
 
-    "parse bad day" in {
-      val temporal = QueryDateTime.unapply("2015-05-32")
-
-      temporal must be (None)
+    "parse bad day" in new BadDateTest{
+      override def date = "2015-05-32"
     }
 
-    "parse february bad day" in {
-      val temporal = QueryDateTime.unapply("2017-02-29")
-
-      temporal must be (None)
+    "parse february bad day" in new BadDateTest{
+      override def date = "2017-02-29"
     }
 
     "parse hour" in {
@@ -88,10 +92,8 @@ class QueryTemporalSpec extends BaseSpec {
       temporal.get.filter(outRangeDate) must be (false)
     }
 
-    "parse bad hour" in {
-      val temporal = QueryDateTime.unapply("2016-07-30 45")
-
-      temporal must be (None)
+    "parse bad hour" in new BadDateTest {
+      override def date: String = "2016-07-30 45"
     }
 
     "parse minute" in {
@@ -106,10 +108,8 @@ class QueryTemporalSpec extends BaseSpec {
       temporal.get.filter(outRangeDate) must be (false)
     }
 
-    "parse bad minute" in {
-      val temporal = QueryDateTime.unapply("2016-07-30 15:70")
-
-      temporal must be (None)
+    "parse bad minute" in new BadDateTest {
+      override def date: String = "2016-07-30 15:70"
     }
   }
 }
