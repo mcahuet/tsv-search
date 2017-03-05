@@ -46,6 +46,12 @@ class QueryTemporalSpec extends BaseSpec {
       temporal.get.filter(outRangeDate) must be (false)
     }
 
+    "parse bad month" in {
+      val temporal = QueryDateTime.unapply("2015-14")
+
+      temporal must be (None)
+    }
+
     "parse day" in {
       val inRangeDate = LocalDateTime.of(2015,5,4,0,0,0)
       val outRangeDate = LocalDateTime.of(2015,5,5,0,0,0)
@@ -56,6 +62,18 @@ class QueryTemporalSpec extends BaseSpec {
       temporal.get.endRange must be (LocalDateTime.of(2015,5,5,0,0,0))
       temporal.get.filter(inRangeDate) must be (true)
       temporal.get.filter(outRangeDate) must be (false)
+    }
+
+    "parse bad day" in {
+      val temporal = QueryDateTime.unapply("2015-05-32")
+
+      temporal must be (None)
+    }
+
+    "parse february bad day" in {
+      val temporal = QueryDateTime.unapply("2017-02-29")
+
+      temporal must be (None)
     }
 
     "parse hour" in {
@@ -70,6 +88,12 @@ class QueryTemporalSpec extends BaseSpec {
       temporal.get.filter(outRangeDate) must be (false)
     }
 
+    "parse bad hour" in {
+      val temporal = QueryDateTime.unapply("2016-07-30 45")
+
+      temporal must be (None)
+    }
+
     "parse minute" in {
       val inRangeDate = LocalDateTime.of(2015,5,4,14,24,0)
       val outRangeDate = LocalDateTime.of(2015,5,4,14,25,0)
@@ -80,6 +104,12 @@ class QueryTemporalSpec extends BaseSpec {
       temporal.get.endRange must be (LocalDateTime.of(2015,5,4,14,25,0))
       temporal.get.filter(inRangeDate) must be (true)
       temporal.get.filter(outRangeDate) must be (false)
+    }
+
+    "parse bad minute" in {
+      val temporal = QueryDateTime.unapply("2016-07-30 15:70")
+
+      temporal must be (None)
     }
   }
 }

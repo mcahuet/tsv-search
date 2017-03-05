@@ -4,28 +4,33 @@ import java.time.LocalDateTime
 
 import play.api.mvc.PathBindable
 
+import scala.util.Try
+
 
 // TODO best validation of date, return Either with error
 
 object QueryDateTime {
 
-  private val badDateFormat = "The param date should be 'yyyy','yyyy-MM','yyyy-MM-dd','yyyy-MM-dd HH','yyyy-MM-dd HH:mm'"
+  private val badDateFormat = "The param 'date' should be a valid date with format 'yyyy','yyyy-MM','yyyy-MM-dd','yyyy-MM-dd HH','yyyy-MM-dd HH:mm'"
 
   private val yearRegex = """([0-9]{4})""".r
-  private val monthRegex = """([0-9]{4})-([0-9]{2})""".r
-  private val dayRegex = """([0-9]{4})-([0-9]{2})-([0-9]{2})""".r
-  private val hourRegex = """([0-9]{4})-([0-9]{2})-([0-9]{2}) ([0-9]{2})""".r
-  private val minuteRegex = """([0-9]{4})-([0-9]{2})-([0-9]{2}) ([0-9]{2}):([0-9]{2})""".r
+  private val monthRegex = s"""$yearRegex-(0[0-9]|1[0-2])""".r
+  private val dayRegex = s"""$monthRegex-([0-2][0-9]|3[0–1])""".r
+  private val hourRegex = s"""$dayRegex ([0-1][0-9]|2[0-3])""".r
+  private val minuteRegex = s"""$hourRegex:([0-5][0-9])""".r
 
   def unapply(arg: String): Option[QueryDateTime] = arg match {
-    case yearRegex(year) => Some(Year(LocalDateTime.of(year.toInt, 1, 1, 0, 0)))
-    case monthRegex(year, month) => Some(Month(LocalDateTime.of(year.toInt, month.toInt, 1, 0, 0)))
-    case dayRegex(year, month, day) => Some(Day(LocalDateTime.of(year.toInt, month.toInt, day.toInt, 0, 0)))
-    case hourRegex(year, month, day, hour) => Some(Hour(LocalDateTime.of(year.toInt, month.toInt, day.toInt, hour.toInt, 0)))
-    case minuteRegex(year, month, day, hour, minute) => Some(Minute(LocalDateTime.of(year.toInt, month.toInt, day.toInt, hour.toInt, minute.toInt)))
+    case yearRegex(year) => createDate(year.toInt, 1, 1, 0, 0).map(Year)
+    case monthRegex(year, month) => createDate(year.toInt, month.toInt, 1, 0, 0).map(Month)
+    case dayRegex(year, month, day) => createDate(year.toInt, month.toInt, day.toInt, 0, 0).map(Day)
+    case hourRegex(year, month, day, hour) => createDate(year.toInt, month.toInt, day.toInt, hour.toInt, 0).map(Hour)
+    case minuteRegex(year, month, day, hour, minute) => createDate(year.toInt, month.toInt, day.toInt, hour.toInt, minute.toInt).map(Minute)
     case _ => None
   }
 
+  private def createDate(year: Int, month: Int, dayOfMonth: Int, hour: Int, minute: Int): Option[LocalDateTime] = {
+    Try(LocalDateTime.of(year,month,dayOfMonth,hour,minute)).toOption
+  }
 
   implicit def binder = new PathBindable[QueryDateTime] {
     def bind(key: String, params: String): Either[String, QueryDateTime] = {
