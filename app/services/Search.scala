@@ -8,7 +8,7 @@ import play.api.Configuration
 
 class Search @Inject()(reader: CsvReader, configuration: Configuration) {
 
-  private val queryFilePath = "conf/resources/hn_logs_test.tsv"
+  private val queryFilePath = configuration.underlying.getString("query.file.path")
   private val tsvSeparator = "\t"
   val maybeQueries: Either[String, Stream[Query]] = reader.read(queryFilePath, tsvSeparator)
 

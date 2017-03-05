@@ -2,14 +2,15 @@ package components
 
 import java.time.LocalDateTime
 
+import play.api.mvc.PathBindable
 
-// TODO pathbindable try
+
 // TODO best validation of date, return Either with error
 
-/**
-  * Use to parse date request param
-  */
-object QueryTemporal {
+object QueryDateTime {
+
+  private val badDateFormat = "The param date should be 'yyyy','yyyy-MM','yyyy-MM-dd','yyyy-MM-dd HH','yyyy-MM-dd HH:mm'"
+
   private val yearRegex = """([0-9]{4})""".r
   private val monthRegex = """([0-9]{4})-([0-9]{2})""".r
   private val dayRegex = """([0-9]{4})-([0-9]{2})-([0-9]{2})""".r
@@ -23,6 +24,18 @@ object QueryTemporal {
     case hourRegex(year, month, day, hour) => Some(Hour(LocalDateTime.of(year.toInt, month.toInt, day.toInt, hour.toInt, 0)))
     case minuteRegex(year, month, day, hour, minute) => Some(Minute(LocalDateTime.of(year.toInt, month.toInt, day.toInt, hour.toInt, minute.toInt)))
     case _ => None
+  }
+
+
+  implicit def binder = new PathBindable[QueryDateTime] {
+    def bind(key: String, params: String): Either[String, QueryDateTime] = {
+      params match {
+        case QueryDateTime(p) => Right(p)
+        case _ => Left(badDateFormat)
+      }
+    }
+
+    def unbind(key: String, date: QueryDateTime) = date.toString
   }
 }
 

@@ -2,7 +2,7 @@ package controllers
 
 import javax.inject.Inject
 
-import components.QueryTemporal
+import components.QueryDateTime
 import play.api.libs.json._
 import play.api.mvc._
 import services.Search
@@ -30,38 +30,28 @@ class Application @Inject()(searchService: Search) extends Controller {
   /**
     * Count of queries
     *
-    * @param maybeDate is date for filter
+    * @param temporal is date for filter
     * @return count of queries in json format
     */
-  def count(maybeDate: String) = Action {
-    maybeDate match {
-      case QueryTemporal(temporal) => {
-        searchService.count(temporal) match {
-          case None => NotFound(missingQuery)
-          case Some(count) => Ok(Json.obj("count" -> count))
-        }
-      }
-      case _ => BadRequest(badDateFormat)
+  def count(temporal: QueryDateTime) = Action {
+    searchService.count(temporal) match {
+      case None => NotFound(missingQuery)
+      case Some(count) => Ok(Json.obj("count" -> count))
     }
   }
 
   /**
     *
-    * @param maybeDate is date for filter
-    * @param limit     is the number of expected results
+    * @param temporal is date for filter
+    * @param limit    is the number of expected results
     * @return the most popular queries
     */
-  def popular(maybeDate: String, limit: Int) = Action {
-    maybeDate match {
-      case QueryTemporal(temporal) => {
-        val popularQuery = searchService.popular(temporal, limit)
-        if (popularQuery.isEmpty) {
-          NotFound(missingQuery)
-        } else {
-          Ok(Json.obj("queries" -> Json.toJson(popularQuery)))
-        }
-      }
-      case _ => BadRequest(badDateFormat)
+  def popular(temporal: QueryDateTime, limit: Int) = Action {
+    val popularQuery = searchService.popular(temporal, limit)
+    if (popularQuery.isEmpty) {
+      NotFound(missingQuery)
+    } else {
+      Ok(Json.obj("queries" -> Json.toJson(popularQuery)))
     }
   }
 }
