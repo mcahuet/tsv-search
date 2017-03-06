@@ -3,7 +3,7 @@ package components
 
 class ReaderSpec extends BaseSpec{
 
-  private val pathFile = "conf/resources/hn_logs_test.tsv"
+  private val pathFile = app.configuration.underlying.getString("query.file.path")
   private val tsvSeparator = "\t"
 
   "CsvReader" must {

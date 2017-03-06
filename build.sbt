@@ -16,3 +16,5 @@ libraryDependencies ++= Seq(
   "org.mockito" % "mockito-core" % "2.7.13" % "test")
 
 routesGenerator := InjectedRoutesGenerator
+
+javaOptions in Test += "-Dconfig.file=conf/application.test.conf"
