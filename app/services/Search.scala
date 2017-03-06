@@ -43,17 +43,17 @@ class Search @Inject()(configuration: Configuration) {
     * @param limit    is the number of expected result
     * @return filtered queries by period
     */
-  def popular(temporal: QueryDateTime, limit: Int): List[(String, Int)] = {
+  def popular(temporal: QueryDateTime, limit: Int): Option[List[(String, Int)]] = {
     if (maybeQueries.isEmpty) {
-      Nil
+      None
     } else {
-      maybeQueries.foldLeft(Map.empty[String, Int]) { (result, query) =>
+      Some(maybeQueries.foldLeft(Map.empty[String, Int]) { (result, query) =>
         if (temporal.filter(query.date)) {
           result + result.get(query.url).map(acc => (query.url, acc + 1)).getOrElse((query.url, 1))
         } else {
           result
         }
-      }.toList.sortWith(_._2 > _._2).take(limit)
+      }.toList.sortWith(_._2 > _._2).take(limit))
     }
   }
 }

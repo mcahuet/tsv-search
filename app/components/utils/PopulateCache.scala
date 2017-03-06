@@ -38,7 +38,11 @@ class PopulateCacheImpl @Inject()(configuration: Configuration, actorSystem: Act
       Logger.error(s"File $filePath not found.")
       actorSystem.scheduler.scheduleOnce(STOP_DELAY, runnable)
     } else {
-      Reader.stream(filePath)
+      val stream = Reader.stream(filePath)
+      if(stream.isEmpty){
+        Logger.error(s"File $filePath is not readable, verify file format")
+        actorSystem.scheduler.scheduleOnce(STOP_DELAY, runnable)
+      }
     }
   }
 

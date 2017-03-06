@@ -55,7 +55,7 @@ class ApplicationSpec extends BaseSpec with Results {
 
     "valid date format but no queries" in {
 
-      when(searchService.popular(year, limit)) thenReturn Nil
+      when(searchService.popular(year, limit)) thenReturn None
       val controller = new Application(searchService)
 
       val result: Future[Result] = controller.popular(year, limit).apply(FakeRequest())
@@ -65,7 +65,7 @@ class ApplicationSpec extends BaseSpec with Results {
 
     "valid date format and some queries" in {
 
-      when(searchService.popular(year, limit)) thenReturn List(("query1", 1), ("query2", 3))
+      when(searchService.popular(year, limit)) thenReturn Some(List(("query1", 1), ("query2", 3)))
       val controller = new Application(searchService)
 
       val result: Future[Result] = controller.popular(year, limit).apply(FakeRequest())
