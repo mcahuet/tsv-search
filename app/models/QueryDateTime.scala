@@ -7,8 +7,6 @@ import play.api.mvc.PathBindable
 import scala.util.Try
 
 
-// TODO best validation of date, return Either with error
-
 object QueryDateTime {
 
   private val badDateFormat = "The param 'date' should be a valid date with format 'yyyy','yyyy-MM','yyyy-MM-dd','yyyy-MM-dd HH','yyyy-MM-dd HH:mm'"
