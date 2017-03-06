@@ -14,7 +14,7 @@ import play.api.Configuration
 class Search @Inject()(configuration: Configuration) {
 
   private val queryFilePath = configuration.underlying.getString("query.file.path")
-  val maybeQueries: Option[Stream[Query]] = Option(Reader.stream(queryFilePath))
+  val maybeQueries: Stream[Query] = Reader.stream(queryFilePath)
 
   /**
     * Count of distinct queries over a period
@@ -23,14 +23,16 @@ class Search @Inject()(configuration: Configuration) {
     * @return filtered queries by period
     */
   def count(temporal: QueryDateTime): Option[Int] = {
-    maybeQueries.map { queries =>
-      queries.foldLeft(Set.empty[String]) { (result: Set[String], query: Query) =>
+    if (maybeQueries.isEmpty) {
+      None
+    } else {
+      Some(maybeQueries.foldLeft(Set.empty[String]) { (result: Set[String], query: Query) =>
         if (temporal.filter(query.date)) {
           result + query.url
         } else {
           result
         }
-      }.size
+      }.size)
     }
   }
 
@@ -42,9 +44,10 @@ class Search @Inject()(configuration: Configuration) {
     * @return filtered queries by period
     */
   def popular(temporal: QueryDateTime, limit: Int): List[(String, Int)] = {
-    maybeQueries match {
-      case None => Nil
-      case Some(queries) => queries.foldLeft(Map.empty[String, Int]) { (result, query) =>
+    if (maybeQueries.isEmpty) {
+      Nil
+    } else {
+      maybeQueries.foldLeft(Map.empty[String, Int]) { (result, query) =>
         if (temporal.filter(query.date)) {
           result + result.get(query.url).map(acc => (query.url, acc + 1)).getOrElse((query.url, 1))
         } else {
