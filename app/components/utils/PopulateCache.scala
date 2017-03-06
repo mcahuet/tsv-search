@@ -31,7 +31,7 @@ class PopulateCacheImpl @Inject()(configuration: Configuration, actorSystem: Act
     if (filePath.isEmpty) {
       Logger.error("You must fill the \"query.file.path\" field in /conf/application.conf which must be the path of the file to be read.")
       actorSystem.scheduler.scheduleOnce(STOP_DELAY, runnable)
-    } else if (filePath.endsWith(".tsv")) {
+    } else if (!filePath.endsWith(".tsv")) {
       Logger.error(s"File $filePath is not a tsv file.")
       actorSystem.scheduler.scheduleOnce(STOP_DELAY, runnable)
     } else if (Try(Source.fromFile(filePath)).isFailure) {
