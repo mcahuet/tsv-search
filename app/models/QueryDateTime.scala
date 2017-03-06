@@ -72,7 +72,7 @@ case class Day(date: LocalDateTime) extends QueryDateTime {
 
 case class Hour(date: LocalDateTime) extends QueryDateTime {
   override val startRange = date.withMinute(0)
-  override val endRange = date.plusHours(1)
+  override val endRange = date.plusHours(1).withMinute(0)
 }
 
 case class Minute(date: LocalDateTime) extends QueryDateTime {
