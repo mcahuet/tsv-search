@@ -3,7 +3,6 @@ package components
 import java.time.LocalDateTime
 
 import models._
-import utils.BaseSpec
 
 class QueryTemporalSpec extends BaseSpec {
 

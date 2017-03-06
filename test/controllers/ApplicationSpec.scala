@@ -2,12 +2,12 @@ package controllers
 
 import java.time.LocalDateTime
 
+import components.BaseSpec
 import models.Year
 import play.api.mvc.{Result, Results}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.Search
-import utils.BaseSpec
 import org.mockito.Mockito._
 
 import scala.concurrent.Future
