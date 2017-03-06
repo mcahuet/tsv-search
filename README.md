@@ -1,7 +1,7 @@
 # Tsv-search
 
 ## Launch and use application
-1. Fill the "query.file.path" field in /conf/application.conf which must be the path of the file to be read.
+1. Fill the "query.file.path" field in /conf/application.conf or add env variable "QUERY_FILE_PATH" which must be the path of the file to be read.
 2. Run the `sbt run` command to start the application.
 3. You can use endpoints count and popular :
 
