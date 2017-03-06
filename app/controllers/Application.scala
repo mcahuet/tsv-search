@@ -40,7 +40,7 @@ class Application @Inject()(searchService: Search) extends Controller {
   }
 
   /**
-    *
+    * Popular of queries
     * @param temporal is date for filter
     * @param limit    is the number of expected results
     * @return the most popular queries

@@ -6,7 +6,9 @@ import play.api.mvc.PathBindable
 
 import scala.util.Try
 
-
+/**
+  * QueryDateTime represent period of request
+  */
 object QueryDateTime {
 
   private val badDateFormat = "The param 'date' should be a valid date with format 'yyyy','yyyy-MM','yyyy-MM-dd','yyyy-MM-dd HH','yyyy-MM-dd HH:mm'"
@@ -27,7 +29,7 @@ object QueryDateTime {
   }
 
   private def createDate(year: Int, month: Int, dayOfMonth: Int, hour: Int, minute: Int): Option[LocalDateTime] = {
-    Try(LocalDateTime.of(year,month,dayOfMonth,hour,minute)).toOption
+    Try(LocalDateTime.of(year, month, dayOfMonth, hour, minute)).toOption
   }
 
   implicit def binder = new PathBindable[QueryDateTime] {

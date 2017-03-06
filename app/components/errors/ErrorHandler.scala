@@ -9,7 +9,10 @@ import play.api.mvc.{RequestHeader, Result}
 
 import scala.concurrent.Future
 
-class ErrorHandler extends HttpErrorHandler{
+/**
+  * Intercepts client and server errors and returns a response in json
+  */
+class ErrorHandler extends HttpErrorHandler {
 
   implicit val errorWriter = Json.writes[Error]
 
@@ -21,10 +24,10 @@ class ErrorHandler extends HttpErrorHandler{
     }
   }
 
-  override def onServerError(request: RequestHeader, exception: Throwable): Future[Result] = Future.successful{
+  override def onServerError(request: RequestHeader, exception: Throwable): Future[Result] = Future.successful {
     Logger.warn(s"Erreur sur ${request.uri} with message : ${exception.getMessage}")
-      InternalServerError(Json.toJson(Error(exception.getMessage)))
-    }
+    InternalServerError(Json.toJson(Error(exception.getMessage)))
+  }
 }
 
-case class Error(msg:String)
+case class Error(msg: String)

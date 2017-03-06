@@ -6,15 +6,24 @@ import components.Reader
 import models.{Query, QueryDateTime}
 import play.api.Configuration
 
+/**
+  * Search service to search and filter queries
+  *
+  * @param configuration is application configuration
+  */
 class Search @Inject()(configuration: Configuration) {
 
   private val queryFilePath = configuration.underlying.getString("query.file.path")
   val maybeQueries: Option[Stream[Query]] = Option(Reader.stream(queryFilePath))
 
+  /**
+    * Count of distinct queries over a period
+    *
+    * @param temporal is the period request
+    * @return filtered queries by period
+    */
   def count(temporal: QueryDateTime): Option[Int] = {
-    // reduce
-    maybeQueries.map(_.count(query => temporal.filter(query.date)))
-    maybeQueries.map{ queries =>
+    maybeQueries.map { queries =>
       queries.foldLeft(Set.empty[String]) { (result: Set[String], query: Query) =>
         if (temporal.filter(query.date)) {
           result + query.url
@@ -25,6 +34,13 @@ class Search @Inject()(configuration: Configuration) {
     }
   }
 
+  /**
+    * Popular queries over a period
+    *
+    * @param temporal is the period request
+    * @param limit    is the number of expected result
+    * @return filtered queries by period
+    */
   def popular(temporal: QueryDateTime, limit: Int): List[(String, Int)] = {
     maybeQueries match {
       case None => Nil

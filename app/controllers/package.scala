@@ -3,7 +3,7 @@ import play.api.libs.json._
 package object controllers {
 
   /**
-    * Writer for popular queries
+    * Json writer for popular queries
     */
   implicit val popularWrites = new Writes[List[(String, Int)]] {
     def writes(popularQueries: List[(String, Int)]) =

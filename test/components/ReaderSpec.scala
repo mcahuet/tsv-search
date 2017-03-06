@@ -1,7 +1,7 @@
 package components
 
 
-class ReaderSpec extends BaseSpec{
+class ReaderSpec extends BaseSpec {
 
   private val pathFile = app.configuration.underlying.getString("query.file.path")
   private val tsvSeparator = "\t"

@@ -11,7 +11,7 @@ import scala.io.Source
 import scala.util.{Failure, Success, Try}
 
 /**
-  * Read csv file
+  * Read tsv file
   */
 // TODO read gz file
 object Reader {
@@ -20,16 +20,16 @@ object Reader {
 
   private val tsvSeparator = "\t"
 
-  def stream(path:String): Stream[Query] = streamCache.get(path)
+  def stream(path: String): Stream[Query] = streamCache.get(path)
 
   private lazy val streamCache: LoadingCache[String, Stream[Query]] = CacheBuilder.newBuilder()
     .expireAfterWrite(30, TimeUnit.MINUTES)
     .build[String, Stream[Query]](new CacheLoader[String, Stream[Query]] {
     override def load(key: String): Stream[Query] = {
-      println("read")
-      read(key,tsvSeparator).fold(err => Stream.empty,identity)
+      read(key, tsvSeparator).fold(err => Stream.empty, identity)
     }
   })
+
   /**
     * Read file
     *

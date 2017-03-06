@@ -13,9 +13,12 @@ import scala.io.Source
 import scala.util.Try
 
 
-trait PopulateCache {}
+trait PopulateCache
 
-class PopulateCacheImpl @Inject()(configuration: Configuration, actorSystem: ActorSystem, applicationProvider: Provider[Application]) extends PopulateCache{
+/**
+  * Verifies that a correct file is set and loads it into the cache
+  */
+class PopulateCacheImpl @Inject()(configuration: Configuration, actorSystem: ActorSystem, applicationProvider: Provider[Application]) extends PopulateCache {
 
   private val STOP_DELAY = Duration.create(5, TimeUnit.SECONDS)
   val runnable = new Runnable {
@@ -23,17 +26,21 @@ class PopulateCacheImpl @Inject()(configuration: Configuration, actorSystem: Act
     override def run(): Unit = sys.runtime.exit(0)
   }
 
-  def checkFileNameConf(): Unit = {
+  def populateCache(): Unit = {
     val filePath = configuration.underlying.getString("query.file.path")
-    if(filePath.isEmpty){
+    if (filePath.isEmpty) {
       Logger.error("You must fill the \"query.file.path\" field in /conf/application.conf which must be the path of the file to be read.")
       actorSystem.scheduler.scheduleOnce(STOP_DELAY, runnable)
-    }else if (Try(Source.fromFile(filePath)).isFailure){
+    } else if (filePath.endsWith(".tsv")) {
+      Logger.error(s"File $filePath is not a tsv file.")
+      actorSystem.scheduler.scheduleOnce(STOP_DELAY, runnable)
+    } else if (Try(Source.fromFile(filePath)).isFailure) {
       Logger.error(s"File $filePath not found.")
       actorSystem.scheduler.scheduleOnce(STOP_DELAY, runnable)
     } else {
       Reader.stream(filePath)
     }
   }
-  checkFileNameConf()
+
+  populateCache()
 }
