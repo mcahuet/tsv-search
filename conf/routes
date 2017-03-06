@@ -5,6 +5,6 @@
 # Home page
 GET     /                           controllers.Application.index
 GET     /1/queries/count/:date      controllers.Application.count(date: models.QueryDateTime)
-GET     /1/queries/popular/:date    controllers.Application.popular(date: models.QueryDateTime, limit: Int)
+GET     /1/queries/popular/:date    controllers.Application.popular(date: models.QueryDateTime, size: Int)
 
     

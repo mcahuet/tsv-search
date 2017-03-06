@@ -2,19 +2,17 @@ package services
 
 import java.time.LocalDateTime
 
-import components.CsvReader
+import components.BaseSpec
 import models.{Query, Year}
-import utils.BaseSpec
 
 
 class SearchSpec extends BaseSpec {
 
-  private val reader = mock[CsvReader]
-  private val searchReturnStream = new Search(reader, app.configuration) {
-    override val maybeQueries = Right(Stream(Query(LocalDateTime.of(2015, 2, 1, 0, 0, 0), "query1"), Query(LocalDateTime.of(2015, 3, 1, 0, 0, 0), "query2")))
+  private val searchReturnStream = new Search(app.configuration) {
+    override val maybeQueries = Some(Stream(Query(LocalDateTime.of(2015, 2, 1, 0, 0, 0), "query1"), Query(LocalDateTime.of(2015, 3, 1, 0, 0, 0), "query2")))
   }
-  private val searchReturnNothing = new Search(reader, app.configuration) {
-    override val maybeQueries = Left("nothing")
+  private val searchReturnNothing = new Search(app.configuration) {
+    override val maybeQueries = None
   }
   private val temporal = Year(LocalDateTime.of(2015, 1, 1, 0, 0, 0))
   private val limit = 10
